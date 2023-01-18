@@ -19,5 +19,8 @@ def summarize_report(text: str):
         "text": text
     }
     )
-    print("summary",response)
-    return {"summary": response}
+    summary = response.json()['summaries'][0]['text']
+    print("summary",summary)
+    
+
+    return {"summary": summary}
