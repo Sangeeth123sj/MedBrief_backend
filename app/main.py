@@ -35,6 +35,7 @@ def summarize_report(text: str):
         "text": text
     }
     )
+    print("response----------------", response.json())
     summary = response.json()['summaries'][0]['text']
     print("summary",type(response.json()))
     
@@ -86,7 +87,7 @@ def q_and_a(text: str):
     }
 )
     answer = response.json()['completions'][0]['data']['text']
-    
+    print("response----------------", response.json())
     print("answer:", answer)
 
     return {"answer": answer}
