@@ -86,8 +86,9 @@ def q_and_a(text: str):
       "stopSequences":["↵"]
     }
 )
-    answer = response.json()['completions'][0]['data']['text']
     print("response----------------", response.json())
+    answer = response.json()['completions'][0]['data']['text']
+   
     print("answer:", answer)
 
     return {"answer": answer}
