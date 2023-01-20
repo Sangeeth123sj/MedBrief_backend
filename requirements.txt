@@ -31,7 +31,7 @@ colorama==0.4.3
 commonmark==0.9.1
 ConfigArgParse==1.5.2
 cryptography==2.8
-cupshelpers==1.0
+# cupshelpers==1.0
 dbus-python==1.2.16
 defer==1.0.6
 defusedxml==0.7.1
