@@ -36,12 +36,136 @@ def summarize_report(text: str= Form(...)):
         "text": text
     }
     )
-    print("response----------------", response.json())
+    
+    keyword_response = requests.post("https://api.ai21.com/studio/v1/j1-large/complete",
+            headers={"Authorization": f"Bearer {token}"},
+            json={
+                "prompt":text+"\nThe key conditions in this medical report are:",
+                "numResults": 1,
+                "maxTokens": 50,
+                "temperature": 0,
+                "topKReturn": 0,
+                "topP":1,
+                "countPenalty": {
+                    "scale": 0,
+                    "applyToNumbers": False,
+                    "applyToPunctuations": False,
+                    "applyToStopwords": False,
+                    "applyToWhitespaces": False,
+                    "applyToEmojis": False
+                },
+                "frequencyPenalty": {
+                    "scale": 0,
+                    "applyToNumbers": False,
+                    "applyToPunctuations": False,
+                    "applyToStopwords": False,
+                    "applyToWhitespaces": False,
+                    "applyToEmojis": False
+                },
+                "presencePenalty": {
+                    "scale": 0,
+                    "applyToNumbers": False,
+                    "applyToPunctuations": False,
+                    "applyToStopwords": False,
+                    "applyToWhitespaces": False,
+                    "applyToEmojis": False
+            },
+            "stopSequences":["==="]
+            }
+        )
+    
+    
+    
+    lifestyle_response = requests.post("https://api.ai21.com/studio/v1/j1-large/complete",
+            headers={"Authorization": f"Bearer {token}"},
+            json={
+                "prompt":text+"\nThe lifestyle changes needed to improve the medical condition are:",
+                "numResults": 1,
+                "maxTokens": 50,
+                "temperature": 0,
+                "topKReturn": 0,
+                "topP":1,
+                "countPenalty": {
+                    "scale": 0,
+                    "applyToNumbers": False,
+                    "applyToPunctuations": False,
+                    "applyToStopwords": False,
+                    "applyToWhitespaces": False,
+                    "applyToEmojis": False
+                },
+                "frequencyPenalty": {
+                    "scale": 0,
+                    "applyToNumbers": False,
+                    "applyToPunctuations": False,
+                    "applyToStopwords": False,
+                    "applyToWhitespaces": False,
+                    "applyToEmojis": False
+                },
+                "presencePenalty": {
+                    "scale": 0,
+                    "applyToNumbers": False,
+                    "applyToPunctuations": False,
+                    "applyToStopwords": False,
+                    "applyToWhitespaces": False,
+                    "applyToEmojis": False
+            },
+            "stopSequences":["==="]
+            }
+        )
+    
+    
+    
+    
+    medicine_response = requests.post("https://api.ai21.com/studio/v1/experimental/j1-grande-instruct/complete",
+    headers={"Authorization": f"Bearer {token}"},
+    json={
+        "prompt": text+"\nThe medicines are:",
+        "numResults": 1,
+        "maxTokens": 296,
+        "temperature": 0.84,
+        "topKReturn": 0,
+        "topP":1,
+        "countPenalty": {
+            "scale": 0,
+            "applyToNumbers": False,
+            "applyToPunctuations": False,
+            "applyToStopwords": False,
+            "applyToWhitespaces": False,
+            "applyToEmojis": False
+        },
+        "frequencyPenalty": {
+            "scale": 185,
+            "applyToNumbers": False,
+            "applyToPunctuations": False,
+            "applyToStopwords": False,
+            "applyToWhitespaces": False,
+            "applyToEmojis": False
+        },
+        "presencePenalty": {
+            "scale": 0.4,
+            "applyToNumbers": False,
+            "applyToPunctuations": False,
+            "applyToStopwords": False,
+            "applyToWhitespaces": False,
+            "applyToEmojis": False
+      },
+      "stopSequences":["##"]
+    }
+)
+    
+    print("Specifics---------------", medicine_response.json().get("completions")[0]['data']['text'])
+    print("Keyword response----------------", keyword_response.json().get("completions")[0]['data']['text'])
+    print("Lifestyle response----------------", lifestyle_response.json().get("completions")[0]['data']['text'])
+    print("Summary response----------------", response.json()['summaries'][0]['text'])
+    
+    medicines = medicine_response.json().get("completions")[0]['data']['text']
+    lifestyle = lifestyle_response.json().get("completions")[0]['data']['text']
+    keywords = keyword_response.json().get("completions")[0]['data']['text']
     summary = response.json()['summaries'][0]['text']
     print("summary",type(response.json()))
     
 
-    return {"summary": summary}
+    return {"summary": summary, "keywords":keywords, "medicines":medicines, "lifestyle":lifestyle }
 
 
 
@@ -51,6 +175,7 @@ def summarize_report(text: str= Form(...)):
 # the context text
 # question:____________?
 def q_and_a(text: str):
+    print("reached q and a_____________________________________________________________________________")
     response = requests.post("https://api.ai21.com/studio/v1/j1-grande/complete",
     headers={"Authorization": f"Bearer {token}"},
     json={
