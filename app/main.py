@@ -1,6 +1,6 @@
 from typing import Union
 import os
-from fastapi import FastAPI
+from fastapi import FastAPI,File,Response,Depends,HTTPException,status,Form
 import requests
 from dotenv import load_dotenv
 load_dotenv()
@@ -27,8 +27,9 @@ def read_root():
     return {"Hello": "MedBrief"}
 
 
-@app.get("/summarize/{text}")
-def summarize_report(text: str):
+@app.post("/summarize/")
+def summarize_report(text: str= Form(...)):
+    print("TEXT_______________",text)
     response = requests.post("https://api.ai21.com/studio/v1/experimental/summarize",
     headers={"Authorization": f"Bearer {token}"},
     json={
