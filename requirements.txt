@@ -33,7 +33,7 @@ ConfigArgParse==1.5.2
 cryptography==2.8
 # cupshelpers==1.0
 dbus-python==1.2.16
-defer==1.0.6
+# defer==1.0.6
 defusedxml==0.7.1
 deta==1.1.0
 distlib==0.3.1
