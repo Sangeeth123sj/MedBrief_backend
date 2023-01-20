@@ -81,7 +81,7 @@ def summarize_report(text: str= Form(...)):
             json={
                 "prompt":text+"\nThe lifestyle changes needed to improve the medical condition are:",
                 "numResults": 1,
-                "maxTokens": 50,
+                "maxTokens": 100,
                 "temperature": 0,
                 "topKReturn": 0,
                 "topP":1,
@@ -170,11 +170,11 @@ def summarize_report(text: str= Form(...)):
 
 
 
-@app.get("/q_and_a/{text}")
+@app.post("/q_and_a/")
 # the text must be in format:
 # the context text
 # question:____________?
-def q_and_a(text: str):
+def q_and_a(text: str= Form(...)):
     print("reached q and a_____________________________________________________________________________")
     response = requests.post("https://api.ai21.com/studio/v1/j1-grande/complete",
     headers={"Authorization": f"Bearer {token}"},
