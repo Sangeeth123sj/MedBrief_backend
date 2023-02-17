@@ -7,7 +7,11 @@ load_dotenv()
 
 app = FastAPI()
 from fastapi.middleware.cors import CORSMiddleware
-origins = ['*']
+origins = [
+    "http://localhost",
+    "http://localhost:8080",
+    "https://med-brief.vercel.app",
+]
 
 app.add_middleware(
     CORSMiddleware,
@@ -36,6 +40,8 @@ def summarize_report(text: str= Form(...)):
         "text": text
     }
     )
+    
+    summary = response.json()['summaries'][0]['text']
     
     keyword_response = requests.post("https://api.ai21.com/studio/v1/j1-large/complete",
             headers={"Authorization": f"Bearer {token}"},
@@ -79,7 +85,7 @@ def summarize_report(text: str= Form(...)):
     lifestyle_response = requests.post("https://api.ai21.com/studio/v1/j1-large/complete",
             headers={"Authorization": f"Bearer {token}"},
             json={
-                "prompt":text+"\nThe lifestyle changes needed to improve the medical condition are:",
+                "prompt":summary+"\nThe lifestyle changes needed to improve the medical condition are:",
                 "numResults": 1,
                 "maxTokens": 100,
                 "temperature": 0,
@@ -119,7 +125,7 @@ def summarize_report(text: str= Form(...)):
     medicine_response = requests.post("https://api.ai21.com/studio/v1/experimental/j1-grande-instruct/complete",
     headers={"Authorization": f"Bearer {token}"},
     json={
-        "prompt": text+"\nThe medicines are:",
+        "prompt": summary+"\nThe medicines are:",
         "numResults": 1,
         "maxTokens": 296,
         "temperature": 0.84,
@@ -161,7 +167,7 @@ def summarize_report(text: str= Form(...)):
     medicines = medicine_response.json().get("completions")[0]['data']['text']
     lifestyle = lifestyle_response.json().get("completions")[0]['data']['text']
     keywords = keyword_response.json().get("completions")[0]['data']['text']
-    summary = response.json()['summaries'][0]['text']
+    
     print("summary",type(response.json()))
     
 
